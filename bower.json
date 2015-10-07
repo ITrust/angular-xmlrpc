@@ -1,6 +1,6 @@
 {
     "name": "angular-xmlrpc",
-    "description": "AngularJS module for XML-RPC communication"
+    "description": "AngularJS module for XML-RPC communication",
     "version": "1.0.0",
     "main": "xmlrpc.js",
     "moduleType":"globals",
