@@ -12,7 +12,7 @@ First of all, add in you application a dependency :
 
 This is an AngularJS service, you can use it in your application as any other service.
 
-    angular.module('MyApp.services', [])
+    angular.module('MyApp')
     .factory('MyAwesomeService', ['xmlrpc', function(xmlrpc){
         return {
             myAwesomeFunction: function(){
