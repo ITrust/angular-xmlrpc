@@ -6,6 +6,10 @@ An AngularJS service which provides XML-RPC communication methods.
 How to use it ?
 ---------------
 
+First of all, add in you application a dependency :
+
+    angular.module('MyApp', ['xml-rpc']);
+
 This is an AngularJS service, you can use it in your application as any other service.
 
     angular.module('MyApp.services', [])
