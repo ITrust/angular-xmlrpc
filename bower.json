@@ -26,6 +26,5 @@
     "dependencies": {
         "angular": "~1.4.0"
     },
-    "devDependencies": {},
-    "private": true
+    "devDependencies": {}
 }
