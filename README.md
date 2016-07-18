@@ -42,7 +42,7 @@ You can configure the hostName and pathName of your xmlrpc webservice. You can a
     .controller('MyAwesomeController', function(xmlrpc) {
         xmlrpc.config({
             hostName:"...", // Default is empty
-            pathName:"/..." // Default is /rpc2
+            pathName:"/...", // Default is /rpc2
             401:function(){
                 console.log("You shall not pass !");
             },
