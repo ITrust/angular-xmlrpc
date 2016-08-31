@@ -480,7 +480,7 @@ angular.module('xml-rpc', [])
             children.shift(); //shift doc
             children.shift(); //shift nodeName
         }
-        if (typeof children == 'array') {
+        if (Array.isArray(children)) {
             angular.forEach(children, appendChild);
         } else if (children) {
             appendChild(children);
