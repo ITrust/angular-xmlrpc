@@ -285,7 +285,7 @@ angular.module('xml-rpc', [])
     };
 }])
 
-.factory('xmlrpc', ['$http', 'helperXmlRpc', 'js2xml', 'xml2js', function($http, helperXmlRpc, js2xml, xml2js){
+.factory('xmlrpc', ['$http', '$q', 'helperXmlRpc', 'js2xml', 'xml2js', function($http, $q, helperXmlRpc, js2xml, xml2js){
     var configuration = {};
 
     /**
@@ -341,13 +341,14 @@ angular.module('xml-rpc', [])
                 } catch (err) {
                     response = err;
                 }
-                return response;
-            }, function(responseFromServer){
+                return $q.resolve(response);
+            }).catch(function(responseFromServer){
                 if(responseFromServer.status in configuration){
                     if(typeof configuration[responseFromServer.status] == "function"){
-                        return configuration[responseFromServer.status].call();
+                        configuration[responseFromServer.status].call();
                     }
                 }
+                return $q.reject(responseFromServer)
             });
     };
 
