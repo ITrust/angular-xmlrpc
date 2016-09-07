@@ -13,8 +13,20 @@ describe('angular-xmlrpc', function() {
     describe('xmlrpc', function() {
 
         it('should send a HTTP request sucessfully', function(done) {
+            var response = `
+            <methodResponse>
+                <params>
+                    <param>
+                        <value>
+                            <string>A test method response</string>
+                        </value>
+                    </param>
+                </params>
+            </methodResponse>
+            `
+
             $httpBackend.expectPOST('http://123.123.123.123/RPC2')
-                .respond(201, 'Hello');
+                .respond(201, response);
 
             $xmlrpc.config({
                 hostName: 'http://123.123.123.123',
@@ -23,7 +35,7 @@ describe('angular-xmlrpc', function() {
 
             $xmlrpc.callMethod('test.method')
                 .then(function(data) {
-                    expect(data).toBeDefined()
+                    expect(data).toEqual('A test method response')
                 })
                 .catch(function(error) {
                     expect(error).toBeNull()
@@ -47,7 +59,7 @@ describe('angular-xmlrpc', function() {
                     expect(true).toBe(false)
                 })
                 .catch(function(error) {
-                    expect(error).toBeDefined()
+                    expect(error.status).toBe(400)
                 })
                 .finally(done)
 

@@ -339,7 +339,7 @@ angular.module('xml-rpc', [])
                 try {
                     response = parseResponse(responseText);
                 } catch (err) {
-                    response = err;
+                    return $q.reject(err)
                 }
                 return $q.resolve(response);
             }).catch(function(responseFromServer){
