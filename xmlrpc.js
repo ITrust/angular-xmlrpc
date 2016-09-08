@@ -43,7 +43,7 @@ angular.module('xml-rpc', [])
     };
     js2xmlMethod_['number'] = number2xml_;
 
-    
+
     /**
      * Convert a boolean to a valid xmlrpc value (as xml element).
      */
@@ -51,8 +51,6 @@ angular.module('xml-rpc', [])
         return helperXmlRpc.createNode(doc, 'boolean', (input ? '1' : '0'));
     };
     js2xmlMethod_['boolean'] = boolean2xml_;
-
-     
 
 
     /**
@@ -67,6 +65,7 @@ angular.module('xml-rpc', [])
             helperXmlRpc.createNode(doc, 'data', elements)
         );
     };
+    js2xmlMethod_['array'] = array2xml_;
 
     /**
      * Convert an object to a valid xmlrpc value (as xml element).
@@ -81,7 +80,7 @@ angular.module('xml-rpc', [])
         }
         return helperXmlRpc.createNode(doc, 'struct', elements);
     };
-
+    js2xmlMethod_['object'] = struct2xml_;
 
     /**
      * Convert a DateTime object to a valid xmlrpc value (as xml element).
@@ -99,28 +98,31 @@ angular.module('xml-rpc', [])
 
         return helperXmlRpc.createNode(doc, 'dateTime.iso8601', str.join(''));
     };
+    js2xmlMethod_['date'] = date2xml_;
 
     /**
-     * Convert an object to a valid xmlrpc value (as xml element).
+     * Convert a typed array to base64 xml encoding
      */
-    function object2xml_(doc, input) {
-        if (input instanceof Date) {
-            return date2xml_(doc, input);
-        }
-        //else
-        if (input instanceof Array)
-            return array2xml_(doc, input);
-        //else
-        return struct2xml_(doc, input);
-    };
-    js2xmlMethod_['object'] = object2xml_;
+    function uint8array2xml_(doc, input) {
+        var base64 = btoa(String.fromCharCode.apply(null, input));
+        return helperXmlRpc.createNode(doc, 'base64', base64);
+    }
+    js2xmlMethod_['uint8array'] = uint8array2xml_;
+
+
+    /**
+     * Returns the object type of complex javascript objects
+     */
+    function type_(obj){
+        return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+    }
 
 
     /**
      * Converts a javascript object to a valid xmlrpc value (as xml element).
      */
     function js2xml_(doc, input) {
-        var type = typeof(input);
+        var type = type_(input)
         var method = js2xmlMethod_[type];
         if (input === null) {
             method = null2xml_;
@@ -152,7 +154,7 @@ angular.module('xml-rpc', [])
     };
     xml2jsMethod_['nil'] = xml2null_;
 
-    
+
     /**
      * Convert an xmlrpc string value (as an xml tree) to a javascript string.
      *
@@ -178,7 +180,7 @@ angular.module('xml-rpc', [])
     xml2jsMethod_['i4'] = xml2number_;
     xml2jsMethod_['double'] = xml2number_;
 
-     
+
     /**
      * Convert an xmlrpc boolean value to a javascript boolean.
      */
@@ -232,7 +234,7 @@ angular.module('xml-rpc', [])
                     }
                 }
                 return res;
-            };        
+            };
 
         return map_(valueNodes, xml2js_);
     };
@@ -261,7 +263,7 @@ angular.module('xml-rpc', [])
     xml2jsMethod_['datetime'] = xml2datetime_;
     xml2jsMethod_['datetime.iso8601'] = xml2datetime_;
 
-    
+
 
     /**
      * Convert an xmlrpc value (as an xml tree) to a javascript object.
@@ -283,7 +285,7 @@ angular.module('xml-rpc', [])
     };
 }])
 
-.factory('xmlrpc', ['$http', 'helperXmlRpc', 'js2xml', 'xml2js', function($http, helperXmlRpc, js2xml, xml2js){
+.factory('xmlrpc', ['$http', '$q', 'helperXmlRpc', 'js2xml', 'xml2js', function($http, $q, helperXmlRpc, js2xml, xml2js){
     var configuration = {};
 
     /**
@@ -310,7 +312,7 @@ angular.module('xml-rpc', [])
         );
         if (arguments.length > 2) {
             params = helperXmlRpc.cloneArray(arguments);
-            params.shift(); 
+            params.shift();
         }
         if (params && params.length > 0) {
             var paramsNode = helperXmlRpc.createNode(doc, 'params');
@@ -337,15 +339,16 @@ angular.module('xml-rpc', [])
                 try {
                     response = parseResponse(responseText);
                 } catch (err) {
-                    response = err;
+                    return $q.reject(err)
                 }
-                return response;
-            }, function(responseFromServer){
+                return $q.resolve(response);
+            }).catch(function(responseFromServer){
                 if(responseFromServer.status in configuration){
                     if(typeof configuration[responseFromServer.status] == "function"){
-                        return configuration[responseFromServer.status].call();
+                        configuration[responseFromServer.status].call();
                     }
                 }
+                return $q.reject(responseFromServer)
             });
     };
 
@@ -409,9 +412,9 @@ angular.module('xml-rpc', [])
         }
         return [];
     };
- 
+
     /**
-     * Creates a XML document for IEs browsers 
+     * Creates a XML document for IEs browsers
      */
     function createMsXmlDocument_(){
         var doc = new ActiveXObject('MSXML2.DOMDocument');
@@ -428,7 +431,7 @@ angular.module('xml-rpc', [])
         }
         return doc;
     };
-    
+
     /**
      * Creates a XML document
      */
@@ -451,11 +454,18 @@ angular.module('xml-rpc', [])
             return document.implementation.createDocument(opt_namespaceUri || '',
                                                   opt_rootTagName || '',
                                                   null);
-        } 
+        }
         throw Error('Your browser does not support creating new documents');
     };
 
-    
+    /**
+     * Returns the object type of complex javascript objects
+     */
+    function type_(obj){
+        return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+    }
+
+
     /**
      * Creates a XML node and set the child(ren) node(s)
      */
@@ -463,7 +473,7 @@ angular.module('xml-rpc', [])
         var elt = doc.createElement(nodeName);
 
         var appendChild = function(child) {
-            if(typeof child == 'object' && child.nodeType !== 1){
+            if(type_(child) === 'object' && child.nodeType !== 1){
                 for(var i in child){
                     elt.appendChild(
                         (typeof child == 'string') ? doc.createTextNode(child[i]) : child[i]
@@ -480,7 +490,7 @@ angular.module('xml-rpc', [])
             children.shift(); //shift doc
             children.shift(); //shift nodeName
         }
-        if (typeof children == 'array') {
+        if (Array.isArray(children)) {
             angular.forEach(children, appendChild);
         } else if (children) {
             appendChild(children);
@@ -494,7 +504,7 @@ angular.module('xml-rpc', [])
     function generateId(){
         return 'xmlrpc-'+(new Date().getTime())+'-'+Math.floor(Math.random()*1000);
     };
- 
+
     /**
      * Creates an XML document from a string
      */
@@ -518,7 +528,7 @@ angular.module('xml-rpc', [])
             node.nodeType == 9 ? node :
             node.ownerDocument || node.document);
     };
-    
+
     /**
      * Return a single node with the given name in the given node
      */
@@ -550,7 +560,7 @@ angular.module('xml-rpc', [])
             if (normalizedWhitespace) {
                 buf.push(String(node.nodeValue).replace(/(\r\n|\r|\n)/g, ''));
             } else {
-                
+
                 buf.push(node.nodeValue);
             }
         } else if (node.nodeName in PREDEFINED_TAG_VALUES_) {

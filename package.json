@@ -1,28 +1,40 @@
 {
-    "name": "angular-xmlrpc",
-    "version": "1.0.0",
-    "description": "AngularJS module for XML-RPC communication",
-    "main": "xmlrpc.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "angular-xmlrpc",
+  "version": "1.0.0",
+  "description": "AngularJS module for XML-RPC communication",
+  "main": "xmlrpc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ITrust/angular-xmlrpc"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "xmlrpc",
+    "angular-xmlrpc",
+    "communication"
+  ],
+  "authors": [
+    {
+      "name": "Julien Chakra"
     },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/ITrust/angular-xmlrpc"
-    },
-    "keywords": [
-        "angular",
-        "angularjs",
-        "xmlrpc",
-        "angular-xmlrpc",
-        "communication"
-    ],
-    "authors":[
-        { "name": "Julien Chakra" },
-        { "name": "Vincent Alquier" }
-    ],
-    "license": "Apache-2.0",
-    "bugs": {
-        "url": "https://github.com/ITrust/angular-xmlrpc/issues"
+    {
+      "name": "Vincent Alquier"
     }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ITrust/angular-xmlrpc/issues"
+  },
+  "devDependencies": {
+    "angular": "^1.5.8",
+    "angular-mocks": "^1.5.8",
+    "jasmine": "^2.5.0",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2"
+  }
 }

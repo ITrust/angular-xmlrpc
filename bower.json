@@ -24,7 +24,7 @@
         "url": "git://github.com/ITrust/angular-xmlrpc"
     },
     "dependencies": {
-        "angular": "~1.4.0"
+        "angular": "^1.5.8"
     },
     "devDependencies": {}
 }
