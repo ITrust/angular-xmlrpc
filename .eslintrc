@@ -1,0 +1,20 @@
+{
+    "extends": "eslint:recommended",
+    "env": {
+        "browser": true,
+        "node": true,
+        "jasmine": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 5,
+        "sourceType": "module"
+    },
+    "globals":{
+        "angular": true,
+        "inject": true,
+
+        "ActiveXObject": true
+    },
+    "rules": {
+    }
+}

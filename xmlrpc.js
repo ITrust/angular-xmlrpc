@@ -3,7 +3,9 @@ var HAS_ACTIVEX = false;
 try {
     new ActiveXObject('MSXML2.DOMDocument');
     HAS_ACTIVEX = true;
-} catch(e) {}
+} catch(e) {
+    // Do nothing
+}
 
 /**
  * XML-RPC communication service.
@@ -14,9 +16,9 @@ angular.module('xml-rpc', [])
     /**
      * Convert Null to XmlRpc valid value (as xml element)
      */
-    function null2xml_(doc, input) {
+    function null2xml_(doc) {
         return helperXmlRpc.createNode(doc, 'nil');
-    };
+    }
 
     var js2xmlMethod_ = {};
 
@@ -25,7 +27,7 @@ angular.module('xml-rpc', [])
      */
     function string2xml_(doc, input) {
         return helperXmlRpc.createNode(doc, 'string', input);
-    };
+    }
     js2xmlMethod_['string'] = string2xml_;
 
     /**
@@ -40,7 +42,7 @@ angular.module('xml-rpc', [])
             value = f;
         }
         return helperXmlRpc.createNode(doc, type, value.toString());
-    };
+    }
     js2xmlMethod_['number'] = number2xml_;
 
 
@@ -49,7 +51,7 @@ angular.module('xml-rpc', [])
      */
     function boolean2xml_(doc, input) {
         return helperXmlRpc.createNode(doc, 'boolean', (input ? '1' : '0'));
-    };
+    }
     js2xmlMethod_['boolean'] = boolean2xml_;
 
 
@@ -64,7 +66,7 @@ angular.module('xml-rpc', [])
         return helperXmlRpc.createNode(doc, 'array',
             helperXmlRpc.createNode(doc, 'data', elements)
         );
-    };
+    }
     js2xmlMethod_['array'] = array2xml_;
 
     /**
@@ -79,7 +81,7 @@ angular.module('xml-rpc', [])
             ));
         }
         return helperXmlRpc.createNode(doc, 'struct', elements);
-    };
+    }
     js2xmlMethod_['object'] = struct2xml_;
 
     /**
@@ -93,11 +95,11 @@ angular.module('xml-rpc', [])
             'T',
             (input.getHours() < 10)? '0' + (input.getHours()):input.getHours(), ':',
             (input.getMinutes() < 10)? '0' + (input.getMinutes()):input.getMinutes(), ':',
-            (input.getSeconds() < 10)? '0' + (input.getSeconds()):input.getSeconds(),
+            (input.getSeconds() < 10)? '0' + (input.getSeconds()):input.getSeconds()
         ];
 
         return helperXmlRpc.createNode(doc, 'dateTime.iso8601', str.join(''));
-    };
+    }
     js2xmlMethod_['date'] = date2xml_;
 
     /**
@@ -130,7 +132,7 @@ angular.module('xml-rpc', [])
             method = string2xml_;
         }
         return helperXmlRpc.createNode(doc, 'value', method(doc, input));
-    };
+    }
 
     return {
         js2xml:js2xml_
@@ -149,9 +151,9 @@ angular.module('xml-rpc', [])
     /**
      * Convert an xmlrpc string value (as an xml tree) to a javascript string.
      */
-    function xml2null_(input) {
+    function xml2null_() {
         return null;
-    };
+    }
     xml2jsMethod_['nil'] = xml2null_;
 
 
@@ -166,7 +168,7 @@ angular.module('xml-rpc', [])
         var buf = [];
         helperXmlRpc.getTextContent(input, buf, false);
         return buf.join('');
-    };
+    }
     xml2jsMethod_['string'] = xml2string_;
 
     /**
@@ -174,7 +176,7 @@ angular.module('xml-rpc', [])
      */
     function xml2number_(input) {
         return parseFloat(helperXmlRpc.getTextContent(input, []));
-    };
+    }
     xml2jsMethod_['int'] = xml2number_;
     xml2jsMethod_['i8'] = xml2number_;
     xml2jsMethod_['i4'] = xml2number_;
@@ -187,7 +189,7 @@ angular.module('xml-rpc', [])
     function xml2boolean_(input) {
         var value = helperXmlRpc.getTextContent(input, []).toLowerCase();
         return isTrue_[value] || false;
-    };
+    }
     xml2jsMethod_['boolean'] = xml2boolean_;
 
     /**
@@ -206,7 +208,7 @@ angular.module('xml-rpc', [])
             }
         }
         return obj;
-    };
+    }
     xml2jsMethod_['struct'] = xml2struct_;
 
     /**
@@ -237,7 +239,7 @@ angular.module('xml-rpc', [])
             };
 
         return map_(valueNodes, xml2js_);
-    };
+    }
     xml2jsMethod_['array'] = xml2array_;
 
     /**
@@ -259,7 +261,7 @@ angular.module('xml-rpc', [])
             parts.splice(2, 0, toSplit.substring(6));
         }
         return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]);
-    };
+    }
     xml2jsMethod_['datetime'] = xml2datetime_;
     xml2jsMethod_['datetime.iso8601'] = xml2datetime_;
 
@@ -278,10 +280,10 @@ angular.module('xml-rpc', [])
             method = xml2struct_;
         }
         return method(elt);
-    };
+    }
 
     return {
-        xml2js:xml2js_,
+        xml2js:xml2js_
     };
 }])
 
@@ -300,7 +302,7 @@ angular.module('xml-rpc', [])
             return new XMLSerializer().serializeToString(xml);
         }
         throw Error('Your browser does not support serializing XML documents');
-    };
+    }
 
     /**
      * Creates a xmlrpc call of the given method with given params.
@@ -325,7 +327,7 @@ angular.module('xml-rpc', [])
         }
         return (serialize(doc)).replace(/[\s\xa0]+$/, '');
 
-    };
+    }
 
     // Use the promise system from angular.
     // This method return a promise with the response
@@ -350,7 +352,7 @@ angular.module('xml-rpc', [])
                 }
                 return $q.reject(responseFromServer)
             });
-    };
+    }
 
 
     /**
@@ -371,7 +373,7 @@ angular.module('xml-rpc', [])
         }
         //else
         return value;
-    };
+    }
 
     /**
      * Configure the service (Host name and service path).
@@ -385,7 +387,7 @@ angular.module('xml-rpc', [])
             401:function(){},
             404:function(){}
         }, conf);
-    };
+    }
 
     config();
 
@@ -411,7 +413,7 @@ angular.module('xml-rpc', [])
             return rv;
         }
         return [];
-    };
+    }
 
     /**
      * Creates a XML document for IEs browsers
@@ -430,7 +432,7 @@ angular.module('xml-rpc', [])
             }
         }
         return doc;
-    };
+    }
 
     /**
      * Creates a XML document
@@ -456,7 +458,7 @@ angular.module('xml-rpc', [])
                                                   null);
         }
         throw Error('Your browser does not support creating new documents');
-    };
+    }
 
     /**
      * Returns the object type of complex javascript objects
@@ -496,14 +498,14 @@ angular.module('xml-rpc', [])
             appendChild(children);
         }
         return elt;
-    };
+    }
 
     /**
      * Generate an ID for XMLRPC request
      */
     function generateId(){
         return 'xmlrpc-'+(new Date().getTime())+'-'+Math.floor(Math.random()*1000);
-    };
+    }
 
     /**
      * Creates an XML document from a string
@@ -518,7 +520,7 @@ angular.module('xml-rpc', [])
             return new DOMParser().parseFromString(xml, 'application/xml');
         }
         throw Error('Your browser does not support loading xml documents');
-    };
+    }
 
     /**
      * Returns the document in which the node is.
@@ -527,27 +529,26 @@ angular.module('xml-rpc', [])
         return (
             node.nodeType == 9 ? node :
             node.ownerDocument || node.document);
-    };
+    }
 
     /**
      * Return a single node with the given name in the given node
      */
     function selectSingleNode_(node, path) {
+        var doc = getOwnerDocument_(node);
         if (typeof node.selectSingleNode != 'undefined') {
-            var doc = getOwnerDocument_(node);
             if (typeof doc.setProperty != 'undefined') {
                 doc.setProperty('SelectionLanguage', 'XPath');
             }
             return node.selectSingleNode(path);
         } else if (document.implementation.hasFeature('XPath', '3.0')) {
-            var doc = getOwnerDocument_(node);
-            var resolver = doc.createNSResolver(doc.documentElement);
-            var result = doc.evaluate(path, node, resolver,
-                XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+            var resolver = doc.createNSResolver(doc.documentElement),
+                result = doc.evaluate(path, node, resolver,
+                    XPathResult.FIRST_ORDERED_NODE_TYPE, null);
             return result.singleNodeValue;
         }
         return null;
-    };
+    }
 
     /**
      * Returns the string content of a node
@@ -573,25 +574,24 @@ angular.module('xml-rpc', [])
             }
         }
         return buf.join('');
-    };
+    }
 
     /**
      * Returns all the nodes in a array that are inside the given node with the given path
      */
     function selectNodes_(node, path) {
+        var doc = getOwnerDocument_(node);
         if (typeof node.selectNodes != 'undefined') {
-            var doc = getOwnerDocument_(node);
             if (typeof doc.setProperty != 'undefined') {
                 doc.setProperty('SelectionLanguage', 'XPath');
             }
             return node.selectNodes(path);
         } else if (document.implementation.hasFeature('XPath', '3.0')) {
-            var doc = getOwnerDocument_(node);
-            var resolver = doc.createNSResolver(doc.documentElement);
-            var nodes = doc.evaluate(path, node, resolver,
-                XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-            var results = [];
-            var count = nodes.snapshotLength;
+            var resolver = doc.createNSResolver(doc.documentElement),
+                nodes = doc.evaluate(path, node, resolver,
+                    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null),
+                results = [],
+                count = nodes.snapshotLength;
             for (var i = 0; i < count; i++) {
                 results.push(nodes.snapshotItem(i));
             }
@@ -599,7 +599,7 @@ angular.module('xml-rpc', [])
         } else {
             return [];
         }
-    };
+    }
 
     return {
         cloneArray:cloneArray_,

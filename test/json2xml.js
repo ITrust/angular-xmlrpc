@@ -104,7 +104,6 @@ describe('angular-xmlrpc', function() {
         })
 
         it('should convert an Date object into an </date> xml tag', function() {
-            var date = new Date();
             var xml = $js2xml.js2xml($doc, new Date(1999, 11, 31, 23, 59, 59));
 
             var output = '<dateTime.iso8601>19991231T23:59:59</dateTime.iso8601>'

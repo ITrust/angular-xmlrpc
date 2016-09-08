@@ -1,7 +1,7 @@
 {
     "name": "angular-xmlrpc",
     "description": "AngularJS module for XML-RPC communication",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "main": "xmlrpc.js",
     "moduleType":"globals",
     "license":"Apache-2.0",
@@ -26,5 +26,12 @@
     "dependencies": {
         "angular": "^1.5.8"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "angular-mocks": "^1.5.8",
+        "eslint": "^2.9.0",
+        "jasmine": "^2.5.0",
+        "karma": "^1.2.0",
+        "karma-chrome-launcher": "^2.0.0",
+        "karma-jasmine": "^1.0.2"
+    }
 }

@@ -48,14 +48,13 @@ describe('angular-xmlrpc', function() {
         it('should send a HTTP request and fail', function(done) {
             $httpBackend.expectPOST('http://127.0.0.1/RPC2')
                 .respond(400, 'Hello');
-
             $xmlrpc.config({
                 hostName: 'http://127.0.0.1',
                 pathName: "/RPC2"
             })
 
             $xmlrpc.callMethod('test.method')
-                .then(function(data) {
+                .then(function() {
                     expect(true).toBe(false)
                 })
                 .catch(function(error) {
