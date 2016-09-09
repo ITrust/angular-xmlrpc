@@ -2,11 +2,14 @@
     "name": "angular-xmlrpc",
     "description": "AngularJS module for XML-RPC communication",
     "version": "1.1.0",
-    "main": "xmlrpc.js",
+    "main": "dist/xmlrpc.js",
     "moduleType":"globals",
     "license":"Apache-2.0",
     "ignore":[
-        "LICENSE"
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test"
     ],
     "keywords": [
         "angular",
