@@ -170,6 +170,7 @@ angular.module('xml-rpc', [])
         return buf.join('');
     }
     xml2jsMethod_['string'] = xml2string_;
+    xml2jsMethod_['base64'] = xml2string_;
 
     /**
      * Convert an xmlrpc number (int or double) value to a javascript number.

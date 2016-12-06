@@ -138,5 +138,13 @@ describe('angular-xmlrpc', function() {
             expect(result).toEqual(new Date(1999, 11, 31, 23, 59, 59));
         })
 
+        
+        it('should convert a <base64> tag to a string value', function() {
+            var xml = '<base64>VGhpcyBpcyBhIHRlc3Q=</base64>'
+            var node = $helperXmlRpc.loadXml(xml);
+            var result = $xml2js.xml2js(node);
+            expect(result).toEqual("VGhpcyBpcyBhIHRlc3Q=");
+        })
+
     });
 });
