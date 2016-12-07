@@ -3,6 +3,18 @@ angular-xmlrpc
 
 An AngularJS service which provides XML-RPC communication methods.
 
+Installation
+------------
+
+From NPM:
+
+    npm install angular-xmlrpc --save
+
+From Bower:
+
+    bower install angular-xmlrpc
+
+
 How to use it ?
 ---------------
 
@@ -53,5 +65,23 @@ You can configure the hostName and pathName of your xmlrpc webservice. You can a
                 console.log("Something went wrong :(");
             }, ...
     });
+
+    
+Types
+-----
+XML-RPC stardard to JS:
+
+- [x] base64
+- [x] string
+- [x] int
+- [x] i8
+- [x] i4
+- [x] double
+- [x] boolean
+- [x] struct
+- [x] array
+- [x] datetime
+- [x] datetime.iso8601
+
 
 Rock on ! \m/
