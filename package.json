@@ -1,12 +1,12 @@
 {
   "name": "angular-xmlrpc",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "AngularJS module for XML-RPC communication",
   "main": "dist/xmlrpc.js",
   "scripts": {
     "eslint": "eslint src/",
     "karma": "karma start karma.conf.js",
-    "prepublish":"npm run uglify",
+    "prepublish": "npm run uglify",
     "uglify": "mkdir -p dist && uglifyjs src/xmlrpc.js -o dist/xmlrpc.min.js",
     "test": ""
   },
