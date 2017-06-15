@@ -115,18 +115,10 @@ angular.module('xml-rpc', [])
 
 
     /**
-     * Returns the object type of complex javascript objects
-     */
-    function type_(obj){
-        return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
-    }
-
-
-    /**
      * Converts a javascript object to a valid xmlrpc value (as xml element).
      */
     function js2xml_(doc, input) {
-        var type = type_(input)
+        var type = helperXmlRpc.type(input)
         var method = js2xmlMethod_[type];
         if (input === null) {
             method = null2xml_;
