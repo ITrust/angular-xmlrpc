@@ -107,7 +107,8 @@ angular.module('xml-rpc', [])
      */
     function uint8array2xml_(doc, input) {
         var decoder = new TextDecoder('utf8');
-        var base64 = btoa(decoder.decode(input));
+        var string = decoder.decode(input);
+        var base64 = btoa(unescape(encodeURIComponent(string)));
         return helperXmlRpc.createNode(doc, 'base64', base64);
     }
     js2xmlMethod_['uint8array'] = uint8array2xml_;
@@ -171,7 +172,17 @@ angular.module('xml-rpc', [])
         return buf.join('');
     }
     xml2jsMethod_['string'] = xml2string_;
-    xml2jsMethod_['base64'] = xml2string_;
+
+    /**
+     * Convert an xmlrpc base64 value to a javascript string
+     */
+    function xml2uint8array_(input) {
+      var buf = [];
+      helperXmlRpc.getTextContent(input, buf, false);
+      var content = decodeURIComponent(escape(window.atob(buf.join(''))));
+      return new TextEncoder('utf8').encode(content)
+    }
+    xml2jsMethod_['base64'] = xml2uint8array_;
 
     /**
      * Convert an xmlrpc number (int or double) value to a javascript number.
@@ -612,7 +623,8 @@ angular.module('xml-rpc', [])
         getOwnerDocument:getOwnerDocument_,
         selectNodes: selectNodes_,
         getTextContent : getTextContent_,
-        selectSingleNode: selectSingleNode_
+        selectSingleNode: selectSingleNode_,
+        type: type_
     };
 
 });

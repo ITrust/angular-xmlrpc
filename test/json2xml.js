@@ -125,5 +125,10 @@ describe('angular-xmlrpc', function() {
             var xml = $js2xml.js2xml($doc, uint8array)
         })
 
+        it('should convert Uint8Array to </base64> xml tag with unicode characters', function() {
+            var uint8array = new TextEncoder('utf8').encode('I \u2661 Unicode!');
+            var xml = $js2xml.js2xml($doc, uint8array);
+        })
+
     });
 });
