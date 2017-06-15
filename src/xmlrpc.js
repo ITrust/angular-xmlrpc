@@ -106,7 +106,8 @@ angular.module('xml-rpc', [])
      * Convert a typed array to base64 xml encoding
      */
     function uint8array2xml_(doc, input) {
-        var base64 = btoa(String.fromCharCode.apply(null, input));
+        var decoder = new TextDecoder('utf8');
+        var base64 = btoa(decoder.decode(input));
         return helperXmlRpc.createNode(doc, 'base64', base64);
     }
     js2xmlMethod_['uint8array'] = uint8array2xml_;

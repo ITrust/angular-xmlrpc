@@ -117,5 +117,13 @@ describe('angular-xmlrpc', function() {
             expect(xml.innerHTML).toEqual('<base64>SGVsbG8gd29ybGQh</base64>');
         });
 
+        it('should convert Uint8Array larger than 128KiB to </base64> xml tag', function() {
+            var size = 1<<27 // 128MiB
+            var longString = "a".repeat(size)
+            expect(longString.length).toEqual(size)
+            var uint8array = new TextEncoder('utf8').encode(longString);
+            var xml = $js2xml.js2xml($doc, uint8array)
+        })
+
     });
 });
