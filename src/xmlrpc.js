@@ -106,9 +106,7 @@ angular.module('xml-rpc', [])
      * Convert a typed array to base64 xml encoding
      */
     function uint8array2xml_(doc, input) {
-        var decoder = new TextDecoder('utf8');
-        var string = decoder.decode(input);
-        var base64 = btoa(unescape(encodeURIComponent(string)));
+        var base64 = base64js.fromByteArray(input);;
         return helperXmlRpc.createNode(doc, 'base64', base64);
     }
     js2xmlMethod_['uint8array'] = uint8array2xml_;
@@ -169,10 +167,8 @@ angular.module('xml-rpc', [])
      * Convert an xmlrpc base64 value to a javascript string
      */
     function xml2uint8array_(input) {
-      var buf = [];
-      helperXmlRpc.getTextContent(input, buf, false);
-      var content = decodeURIComponent(escape(window.atob(buf.join(''))));
-      return new TextEncoder('utf8').encode(content)
+      var base64 = xml2string_(input)
+      return base64js.toByteArray(base64);
     }
     xml2jsMethod_['base64'] = xml2uint8array_;
 
