@@ -138,12 +138,23 @@ describe('angular-xmlrpc', function() {
             expect(result).toEqual(new Date(1999, 11, 31, 23, 59, 59));
         })
 
-        
-        it('should convert a <base64> tag to a string value', function() {
+
+        it('should convert a <base64> tag to an Uint8array', function() {
             var xml = '<base64>VGhpcyBpcyBhIHRlc3Q=</base64>'
             var node = $helperXmlRpc.loadXml(xml);
             var result = $xml2js.xml2js(node);
-            expect(result).toEqual("VGhpcyBpcyBhIHRlc3Q=");
+            var content = new TextDecoder('utf8').decode(result)
+            expect($helperXmlRpc.type(result)).toEqual('uint8array')
+            expect(content).toEqual('This is a test');
+        })
+
+        it('should convert a <base64> tag with unicode characters to an Uint8array', function() {
+            var xml = '<base64>SSDimaEgVW5pY29kZSE=</base64>'
+            var node = $helperXmlRpc.loadXml(xml);
+            var result = $xml2js.xml2js(node);
+            var content = new TextDecoder('utf8').decode(result)
+            expect($helperXmlRpc.type(result)).toEqual('uint8array')
+            expect(content).toEqual('I \u2661 Unicode!');
         })
 
     });

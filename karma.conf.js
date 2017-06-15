@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/base64-js/base64js.min.js',
       'src/xmlrpc.js',
       'test/**/*.js'
     ],
